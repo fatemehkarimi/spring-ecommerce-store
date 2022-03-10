@@ -1,6 +1,5 @@
 package com.example.ecommerce.config;
 
-import com.example.ecommerce.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -13,16 +12,17 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import com.example.ecommerce.service.UserService;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-
+	
 	@Autowired
 	private UserService userService;
-	
+
 	@Bean
-    public BCryptPasswordEncoder passwordEncoder() {
+	public static BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 	
@@ -42,10 +42,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers(
-				 "/signup**",
-	                "/js/**",
-	                "/css/**",
-	                "/img/**").permitAll()
+			"/signup**",
+			"/js/**",
+			"/css/**",
+			"/img/**"
+		).permitAll()
 		.anyRequest().authenticated()
 		.and()
 		.formLogin()
@@ -59,5 +60,4 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.logoutSuccessUrl("/login?logout")
 		.permitAll();
 	}
-
 }

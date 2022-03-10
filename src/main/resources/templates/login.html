@@ -1,0 +1,49 @@
+<html>
+  <head>
+    <title>Login</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-dark bg-dark mb-4">
+      <a class="navbar-brand" href="#" >ECommerce Store</a>
+    </nav>
+
+    <div class="container">
+      <div class="row justify-content-md-center">
+        <div class="col-5">
+          <h1>Login</h1>
+          <form th:action="@{/login}" method="post">
+            <div th:if="${param.error}">
+              <div class="alert alert-danger">
+                Invalid email address or password.
+              </div>
+            </div>
+
+            <div th:if="${param.logout}">
+              <div class="alert alert-info">You have been logged out.</div>
+            </div>
+
+            <div class="form-group mb-2">
+              <label for="username">Email</label>
+              <input type="text" class="form-control" id="username" name="username" placeholder="user@example.com" autofocus="autofocus" />
+            </div>
+
+            <div class="form-group mb-2">
+              <label for="password">Password</label>
+              <input type="password" class="form-control" id="password" name="password" autofocus="autofocus" />
+            </div>
+            
+            <div class="form-group">
+              <input type="submit" name="login-submit" id="login-submit"
+                class="form-control btn btn-success" value="Login" />
+              <span>
+                Don't have and account? <a href="/" th:href="@{/signup}">Sign up</a>
+              </span>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
