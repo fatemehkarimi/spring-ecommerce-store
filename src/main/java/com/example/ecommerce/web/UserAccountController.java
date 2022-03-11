@@ -33,4 +33,11 @@ public class UserAccountController {
             model.addAttribute("user", user);
         return "profile";
     }
+
+    @GetMapping("/profile/edit")
+    public String showUserProfileEdit(Model model) {
+        User user = getLoggedInUser();
+        model.addAttribute("user", user);
+        return "profile_edit";
+    }
 }
