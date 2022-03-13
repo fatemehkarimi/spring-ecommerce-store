@@ -1,6 +1,8 @@
 package com.example.ecommerce.service;
 
 import java.util.UUID;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +12,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
-import com.example.ecommerce.model.User;
 import com.example.ecommerce.dao.UserDao;
+import com.example.ecommerce.model.User;
 import com.example.ecommerce.web.dto.UserSignupDto;
 
 @Service
@@ -41,6 +42,26 @@ public class UserServiceImpl implements UserService {
             passwordEncoder.encode(signupDto.getPassword())
             );
         return userDao.save(user);
+    }
+
+    @Override
+    public User update(UserSignupDto updatedUser) {
+        User user = userDao.findByEmail(updatedUser.getEmail());
+        String newPassword = 
+            updatedUser.getPassword().isEmpty()
+            ? user.getPassword()
+            : passwordEncoder.encode(updatedUser.getPassword());
+
+        User savedUser = new User(
+            user.getId(),
+            updatedUser.getFirstName(),
+            updatedUser.getLastName(),
+            updatedUser.getPhoneNumber(),
+            user.getEmail(),
+            newPassword
+        );
+
+        return userDao.save(savedUser);
     }
 
     @Override

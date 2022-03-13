@@ -8,4 +8,5 @@ import com.example.ecommerce.web.dto.UserSignupDto;
 
 public interface UserService extends UserDetailsService {
     User save(UserSignupDto signupDto);
+    User update(UserSignupDto updateDto);
 }

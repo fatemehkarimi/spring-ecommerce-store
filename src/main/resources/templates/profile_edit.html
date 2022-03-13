@@ -18,30 +18,30 @@
               <span style="font-size: 150%;">Edit profile</span>
             </div>
             <div class="card-body">
-              <form th:action="@{/user/profile/edit}" method="update" th:object="${user}">
-
+              <form th:action="@{/user/profile/edit}" th:method="put" th:object="${updatedUser}">
                 <div class="form-group mb-2">
+                  <input id="email" th:field="*{email}" *th:value="${updatedUser.getEmail()}" type="hidden" />
                   <label class="control-label" for="firstName">First name</label>
-                  <input id="firstName" class="form-control" th:field="*{firstName}" th:value="${user.getFirstName()}" autofocus="autofocus" />
+                  <input id="firstName" class="form-control" th:field="*{firstName}" th:value="${updatedUser.getFirstName()}" autofocus="autofocus" />
                 </div>
 
                 <div class="form-group mb-2">
                   <label class="control-label" for="lastName">Last name</label>
-                  <input id="lastName" class="form-control" th:field="*{lastName}" th:value="${user.getLastName()}" autofocus="autofocus" />
+                  <input id="lastName" class="form-control" th:field="*{lastName}" th:value="${updatedUser.getLastName()}" autofocus="autofocus" />
                 </div>
 
                 <div class="form-group mb-2">
                   <label class="control-label" for="phoneNumber">Phone number</label>
-                  <input id="phoneNumber" class="form-control" th:field="*{phoneNumber}" th:value="${user.getPhoneNumber()}" autofocus="autofocus" />
+                  <input id="phoneNumber" class="form-control" th:field="*{phoneNumber}" th:value="${updatedUser.getPhoneNumber()}" autofocus="autofocus" />
                 </div>
 
                 <div class="form-group mb-2">
-                  <label class="control-label" for="email">Email</label>
-                  <input id="email" class="form-control" th:field="*{email}" th:value="${user.getEmail()}" autofocus="autofocus" />
+                  <label class="control-label" for="password">New password</label>
+                  <input id="password" type="password" class="form-control" th:field="*{password}" placeholder="New password" autofocus="autofocus" />
                 </div>
 
                 <div class="form-group">
-                  <button type="submit" class="btn btn-success">Update</button>
+                  <input type="submit" class="btn btn-success" />
                 </div>
               </form>
             </div>

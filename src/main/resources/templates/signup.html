@@ -18,7 +18,7 @@
           </div>
 
           <h1>Sign Up</h1>
-          <form th:action="@{/signup}" method="post" th:object="${user}">
+          <form th:action="@{/signup}" th:method="post" th:object="${user}">
             <div class="form-group mb-2">
               <label class="control-label" for="firstName">First name</label>
               <input id="firstName" class="form-control" th:field="*{firstName}" required autofocus="autofocus" />
