@@ -74,4 +74,8 @@ public class User {
     public String getPassword() {
         return password;
     }
+
+    public Set <Address> getAddresses() {
+        return addresses;
+    }
 }
