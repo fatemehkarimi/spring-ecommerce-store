@@ -3,7 +3,6 @@ package com.example.ecommerce.web.dto;
 import com.example.ecommerce.model.User;
 
 public class AddressDto {
-    private long id = -1;
     private String city;
     private String streetAddress;
     private String postalCode;
@@ -13,29 +12,11 @@ public class AddressDto {
 
     }
 
-    public AddressDto(
-        long id, String city, String streetAddress, String postalCode, User user)
-    {
-        this.id = id;
-        this.city = city;
-        this.streetAddress = streetAddress;
-        this.postalCode = postalCode;
-        this.user = user;
-    }
-
     public AddressDto(String city, String streetAddress, String postalCode, User user) {
         this.city = city;
         this.streetAddress = streetAddress;
         this.postalCode = postalCode;
         this.user = user;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getCity() {
