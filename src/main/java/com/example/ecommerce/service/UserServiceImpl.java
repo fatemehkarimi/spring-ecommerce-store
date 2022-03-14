@@ -1,6 +1,8 @@
 package com.example.ecommerce.service;
 
 import java.util.UUID;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +22,13 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    @Autowired
     private UserDao userDao;
 
-    UserServiceImpl(UserDao userDao) {
-        super();
-        this.userDao = userDao;
-    }
+    // UserServiceImpl(UserDao userDao) {
+    //     super();
+    //     this.userDao = userDao;
+    // }
 
     @Override
     public User save(UserSignupDto signupDto) {
@@ -45,18 +48,34 @@ public class UserServiceImpl implements UserService {
     @Override
     public User update(UserSignupDto updatedUser) {
         User user = userDao.findByEmail(updatedUser.getEmail());
-        String newPassword = 
-            updatedUser.getPassword().isEmpty()
+
+        String firstName = 
+            updatedUser.getFirstName() == null || updatedUser.getFirstName().isEmpty()
+            ? user.getFirstName()
+            : updatedUser.getFirstName();
+
+        String lastName =
+            updatedUser.getLastName() == null || updatedUser.getLastName().isEmpty()
+            ? user.getLastName()
+            : updatedUser.getLastName();
+
+        String phoneNumber =
+            updatedUser.getPhoneNumber() == null || updatedUser.getPhoneNumber().isEmpty()
+            ? user.getPhoneNumber()
+            : updatedUser.getPhoneNumber();
+        
+        String password = 
+            updatedUser.getPassword() == null || updatedUser.getPassword().isEmpty()
             ? user.getPassword()
             : passwordEncoder.encode(updatedUser.getPassword());
 
         User savedUser = new User(
             user.getId(),
-            updatedUser.getFirstName(),
-            updatedUser.getLastName(),
-            updatedUser.getPhoneNumber(),
+            firstName,
+            lastName,
+            phoneNumber,
             user.getEmail(),
-            newPassword
+            password
         );
 
         return userDao.save(savedUser);

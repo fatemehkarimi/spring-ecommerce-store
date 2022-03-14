@@ -92,7 +92,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 		http.exceptionHandling()
 		.authenticationEntryPoint((request, response, e) -> {
-			String json = String.format("{\"message\": \"%s\"}", "invalid username or password");
+			String json = String.format("{\"message\": \"%s\"}", e.getMessage());
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
