@@ -1,12 +1,6 @@
 package com.example.ecommerce.web;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.Writer;
-import java.util.Set;
-
 import com.example.ecommerce.dao.UserDao;
-import com.example.ecommerce.model.Address;
 import com.example.ecommerce.model.User;
 import com.example.ecommerce.service.AddressService;
 import com.example.ecommerce.web.dto.AddressDto;
