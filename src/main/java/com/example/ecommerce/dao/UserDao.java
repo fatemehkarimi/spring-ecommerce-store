@@ -1,7 +1,5 @@
 package com.example.ecommerce.dao;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.UUID;
 
 import com.example.ecommerce.model.User;
