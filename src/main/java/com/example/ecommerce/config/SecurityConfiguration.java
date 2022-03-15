@@ -1,9 +1,9 @@
 package com.example.ecommerce.config;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -11,13 +11,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
 import com.example.ecommerce.service.UserService;
@@ -68,7 +70,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers(
-			"/signup**",
+			"/api/auth/*",
 			"/js/**",
 			"/css/**",
 			"/img/**"
@@ -77,16 +79,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			"/api/user/**"
 		).authenticated()
 		.and()
-		.formLogin()
-		.loginPage("/login")
-		.permitAll()
-		.and()
 		.logout()
-		.invalidateHttpSession(true)
-		.clearAuthentication(true)
-		.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-		.logoutSuccessUrl("/login?logout")
-		.permitAll();
+			.logoutUrl("/api/auth/logout")
+			.logoutSuccessHandler(
+				new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK))
+			.permitAll()
+			.and()
+			.formLogin()
+			.disable();
 
 		http.cors().and().csrf().disable();
 
