@@ -25,11 +25,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
 
-    // UserServiceImpl(UserDao userDao) {
-    //     super();
-    //     this.userDao = userDao;
-    // }
-
     @Override
     public User save(UserSignupDto signupDto) {
         UUID id = UUID.randomUUID();
