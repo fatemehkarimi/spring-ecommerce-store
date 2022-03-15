@@ -5,5 +5,5 @@ import com.example.ecommerce.web.dto.AddressDto;
 
 public interface AddressService {
     public Address save(AddressDto addressDto);
-    // public Address update(AddressDto addressDto);
+    public Address update(long id, AddressDto addressDto);
 }

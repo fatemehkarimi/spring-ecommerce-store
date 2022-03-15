@@ -34,6 +34,16 @@ public class Address {
 
     }
 
+    public Address(long id, String city,
+        String streetAddress, String postalCode, User user)
+    {
+        this.id = id;
+        this.city = city;
+        this.streetAddress = streetAddress;
+        this.postalCode = postalCode;
+        this.user = user;
+    }
+
     public Address(String city, String streetAddress, String postalCode, User user) {
         this.city = city;
         this.streetAddress = streetAddress;
