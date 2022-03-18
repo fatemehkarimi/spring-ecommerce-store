@@ -3,10 +3,6 @@ Feature: User Login To Account
 
 	Scenario Outline: User Can Login To Account
 		Given a user with email = "<email>" and password = "<password>"
-		And the following users are already available
-			| email						| password	|
-			| fatemehkarimi@gmail.com	| pass123	|
-			| humasamiee@gmail.com   	| test124	|
 		When i try to login to my account
 
 		Examples:

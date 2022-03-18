@@ -53,7 +53,6 @@
 			<artifactId>cucumber-java</artifactId>
 			<version>7.2.3</version>
 		</dependency>
-		
 
 		<dependency>
 			<groupId>io.cucumber</groupId>
@@ -74,6 +73,15 @@
 			<version>4.13.2</version>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>4.4.0</version>
+			<scope>test</scope>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>

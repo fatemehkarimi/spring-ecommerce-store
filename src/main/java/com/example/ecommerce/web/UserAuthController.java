@@ -39,7 +39,7 @@ public class UserAuthController {
         );
 
         SecurityContextHolder.getContext().setAuthentication(auth);
-        return new ResponseEntity<>("user is now loggged in", HttpStatus.OK);
+        return new ResponseEntity<>("user is now logged in", HttpStatus.OK);
     }
 
     @PostMapping("/signup")
