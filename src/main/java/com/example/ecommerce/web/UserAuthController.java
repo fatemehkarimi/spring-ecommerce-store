@@ -7,6 +7,7 @@ import com.example.ecommerce.web.dto.UserLoginDto;
 import com.example.ecommerce.web.dto.UserSignupDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,9 +44,14 @@ public class UserAuthController {
     }
 
     @PostMapping("/signup")
-    public void signupUserAccount(
+    public ResponseEntity<String> signupUserAccount(
         @Valid @NonNull @RequestBody UserSignupDto signupDto)
     {
-        userService.save(signupDto);
+        try {
+            userService.save(signupDto);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch(DataIntegrityViolationException e) {
+            return new ResponseEntity<>("email already exists", HttpStatus.FORBIDDEN);
+        }
     }
 }

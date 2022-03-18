@@ -3,6 +3,7 @@ package com.example.ecommerce.unitTests;
 import com.example.ecommerce.model.User;
 import com.example.ecommerce.service.UserService;
 import com.example.ecommerce.web.UserAuthController;
+import com.example.ecommerce.web.dto.UserSignupDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.junit.Test;
@@ -11,6 +12,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -44,6 +46,14 @@ public class UserControllerTest {
             "09123456789",
             "fatemehkarimi@gmail.com",
             "$2a$10$EdJnVTWFWG4j9VorOuO7W.7fkn2AB/P.Od4TUbFO4x.vqraR80Tq2");
+
+    UserSignupDto user1Dto = new UserSignupDto(
+            "fatemeh",
+            "karimi",
+            "fatemehkarimi@gmail.com",
+            "admin",
+            "09123456789"
+    );
 
     @Test
     public void successUserLogin() throws Exception {
@@ -102,5 +112,45 @@ public class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Bad credentials"));
+    }
+
+    @Test
+    public void successSignup() throws Exception {
+        Mockito.when(userService.save(user1Dto)).thenReturn(user1);
+
+        Object signupData = new Object() {
+            public String firstName = user1Dto.getFirstName();
+            public String lastName = user1Dto.getLastName();
+            public String email = user1Dto.getEmail();
+            public String password = user1Dto.getPassword();
+            public String phoneNumber = user1Dto.getPhoneNumber();
+        };
+
+        String json = objectMapper.writeValueAsString(signupData);
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/api/auth/signup")
+                        .content(json)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void failSignupAlreadyExistUsername() throws Exception {
+        Mockito.when(userService.save(Mockito.any())).thenThrow(DataIntegrityViolationException.class);
+        Object signupData = new Object() {
+            public String firstName = user1Dto.getFirstName();
+            public String lastName = user1Dto.getLastName();
+            public String email = user1Dto.getEmail();
+            public String password = user1Dto.getPassword();
+            public String phoneNumber = user1Dto.getPhoneNumber();
+        };
+
+        String json = objectMapper.writeValueAsString(signupData);
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/api/auth/signup")
+                        .content(json)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden())
+                .andExpect(content().string("email already exists"));
     }
 }
