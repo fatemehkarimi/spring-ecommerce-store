@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest({UserAuthController.class})
-public class UserControllerTest {
+public class UserAuthControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
