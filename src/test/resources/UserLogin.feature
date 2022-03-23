@@ -14,3 +14,11 @@ Feature: User Login To Account
 			| firstname.lastname@gmail.com	| passs12	| access denied |
 
 
+	Scenario Outline:  A logged in user must be able to log out
+		Given i am already logged in with email = "<email>" and password = "<password>"
+		When i send a request to URL "/api/auth/logout"
+		Then i must not be able to see my profile information at URL "/api/user/profile"
+
+		Examples:
+			| email							| password	|
+			| fatemehkarimi.1998@yahoo.com	| admin		|

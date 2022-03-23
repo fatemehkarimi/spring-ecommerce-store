@@ -1,4 +1,5 @@
 package com.example.ecommerce.Cucumber.glue;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -12,14 +13,12 @@ import org.springframework.boot.web.server.LocalServerPort;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class UserLoginSteps {
+public class UserLogoutSteps {
     private final static String BASE_URI = "http://localhost";
     @LocalServerPort
     private int port;
 
     ObjectMapper objectMapper = new ObjectMapper();
-
-    private Response response;
 
     private void configureRestAssured() {
         RestAssured.baseURI = BASE_URI;
@@ -31,9 +30,9 @@ public class UserLoginSteps {
         return given();
     }
 
-    @Given("i send a request to URL {string} with email = {string} and password = {string}")
-    public void i_send_a_request_to_url_with_email_and_password(String endpoint, String user_email, String user_password)
-            throws Exception
+    @Given("i am already logged in with email = {string} and password = {string}")
+    public void i_am_already_logged_in_with_email_and_password(
+            String user_email, String user_password) throws Exception
     {
         Object loginData = new Object() {
             public String email = user_email;
@@ -41,21 +40,23 @@ public class UserLoginSteps {
         };
 
         String json = objectMapper.writeValueAsString(loginData);
-        this.response = requestSpecification().contentType(ContentType.JSON)
-                .body(json).post(endpoint);
+        requestSpecification().contentType(ContentType.JSON)
+                .body(json).post("/api/auth/login")
+                .then().assertThat().statusCode(200);
     }
 
-    @Then("the result is {string}")
-    public void the_result_is(String result) {
-        if(result.equals("authenticated")) {
-            this.response.then().assertThat().statusCode(200);
-            String message = this.response.then().extract().asString();
-            assertThat(message).isEqualTo("user is now logged in");
-        }
-        else {
-            this.response.then().assertThat().statusCode(401);
-            String message = this.response.jsonPath().get("message");
-            assertThat(message).isEqualTo("Bad credentials");
-        }
+    @When("i send a request to URL {string}")
+    public void i_send_a_request_to_url(String endpoint) {
+        requestSpecification().post(endpoint)
+                .then().assertThat().statusCode(200);
+    }
+
+    @Then("i must not be able to see my profile information at URL {string}")
+    public void i_must_not_be_able_to_see_my_profile_information(String endpoint) {
+        Response response = requestSpecification().get(endpoint);
+        response.then().assertThat().statusCode(401);
+
+        String message = response.jsonPath().get("message");
+        assertThat(message).isEqualTo("Full authentication is required to access this resource");
     }
 }
