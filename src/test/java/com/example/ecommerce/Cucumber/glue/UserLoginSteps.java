@@ -1,5 +1,4 @@
 package com.example.ecommerce.Cucumber.glue;
-import com.example.ecommerce.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -50,9 +49,16 @@ public class UserLoginSteps {
     }
 
     @Then("the result is {string}")
-    public void the_result_is(String string) {
-        this.response.then().assertThat().statusCode(200);
-        String message = this.response.then().extract().asString();
-        assertThat(message).isEqualTo("user is now logged in");
+    public void the_result_is(String result) {
+        if(result.equals("authenticated")) {
+            this.response.then().assertThat().statusCode(200);
+            String message = this.response.then().extract().asString();
+            assertThat(message).isEqualTo("user is now logged in");
+        }
+        else {
+            this.response.then().assertThat().statusCode(401);
+            String message = this.response.jsonPath().get("message");
+            assertThat(message).isEqualTo("Bad credentials");
+        }
     }
 }
