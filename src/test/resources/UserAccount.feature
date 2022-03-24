@@ -10,3 +10,13 @@ Feature: User can manage profile and its addresses
         Examples:
           | email                         | password  | phoneNumber |
           | fatemehkarimi.1998@yahoo.com  | admin     | 09000000000 |
+
+
+    Scenario Outline: User can edit his address
+      Given i am a logged in user with email = "<email>" and password = "<password>"
+      When i send a request to URL "/api/user/address/<id>" to update the city of address with id = "<id>" to "<city>"
+      Then i can see that the city name of that address has been updated at URL "/api/user/address"
+
+      Examples:
+      | email                         | password  | id  | city    |
+      | fatemehkarimi.1998@yahoo.com  | admin     | 10  | Shiraz  |

@@ -6,9 +6,15 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
+import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.springframework.boot.web.server.LocalServerPort;
+
+import java.io.PrintWriter;
+import java.util.List;
+import java.util.Map;
+
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -20,6 +26,8 @@ public class UserAccountSteps {
     String email;
     String password;
     String updated_phoneNumber;
+    String addressId;
+    String updated_cityName;
     String cookie;
     ObjectMapper objectMapper = new ObjectMapper();
 
@@ -78,5 +86,41 @@ public class UserAccountSteps {
                 .get(endpoint)
                 .jsonPath().get("phoneNumber");
         assertThat(result).isEqualTo(updated_phoneNumber);
+    }
+
+    @When("i send a request to URL {string} to update the city of address with id = {string} to {string}")
+    public void i_send_a_request_to_url_to_update_the_city_of_address_with_id_to(
+            String endpoint, String addressId, String updated_cityName) throws Exception
+    {
+
+        this.updated_cityName = updated_cityName;
+        this.addressId = addressId;
+
+        Object object = new Object() {
+            public String city = updated_cityName;
+        };
+
+        String json = objectMapper.writeValueAsString(object);
+        given().header("Cookie", this.cookie)
+                .contentType(ContentType.JSON)
+                .body(json)
+                .put(endpoint)
+                .then().statusCode(200);
+
+    }
+
+    @Then("i can see that the city name of that address has been updated at URL {string}")
+    public void i_can_see_that_the_city_name_of_that_address_has_been_updated_at_url(String endpoint) throws Exception {
+        List <Map<String, Object> > result =
+        given().header("Cookie", this.cookie)
+                .get(endpoint).then()
+                .extract().body().as(new TypeRef<List<Map<String, Object>>>() {});
+
+        for(Map <String, Object> address : result) {
+            if(address.get("id").equals(this.addressId)) {
+                assertThat(address.get("city")).isEqualTo(this.updated_cityName);
+                break;
+            }
+        }
     }
 }
