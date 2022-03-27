@@ -1,8 +1,6 @@
 package com.example.ecommerce.service;
 
 import java.util.UUID;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
