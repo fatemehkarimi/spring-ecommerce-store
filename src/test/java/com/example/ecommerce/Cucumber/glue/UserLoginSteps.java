@@ -1,8 +1,8 @@
 package com.example.ecommerce.Cucumber.glue;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -21,14 +21,10 @@ public class UserLoginSteps {
 
     private Response response;
 
-    private void configureRestAssured() {
+    @Before
+    public void setup() {
         RestAssured.baseURI = BASE_URI;
         RestAssured.port = port;
-    }
-
-    protected RequestSpecification requestSpecification() {
-        configureRestAssured();
-        return given();
     }
 
     @Given("i send a request to URL {string} with email = {string} and password = {string}")
@@ -41,7 +37,7 @@ public class UserLoginSteps {
         };
 
         String json = objectMapper.writeValueAsString(loginData);
-        this.response = requestSpecification().contentType(ContentType.JSON)
+        this.response = given().contentType(ContentType.JSON)
                 .body(json).post(endpoint);
     }
 
