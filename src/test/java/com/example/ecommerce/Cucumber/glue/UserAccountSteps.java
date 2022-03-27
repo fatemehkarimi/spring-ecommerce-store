@@ -1,6 +1,7 @@
 package com.example.ecommerce.Cucumber.glue;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -17,6 +18,7 @@ import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.hamcrest.Matchers.hasKey;
 
 public class UserAccountSteps {
     private final static String BASE_URI = "http://localhost";
@@ -122,5 +124,37 @@ public class UserAccountSteps {
                 break;
             }
         }
+    }
+
+    @When("i send a request to URL {string} to see list of orders")
+    public void i_send_a_request_to_url_to_see_list_of_orders(String endpoint) {
+        response = given().header("Cookie", this.cookie)
+                .get(endpoint);
+    }
+
+    @Then("i can see the list of my previous orders")
+    public void i_can_see_the_list_of_my_previous_orders() {
+        response.then().statusCode(200);
+        int length = JsonPath
+                .parse(response.body().asString())
+                .read("$.length()");
+
+        assertThat(length).isGreaterThan(0);
+    }
+
+    @When("i send a request to URL {string} to see details of an order")
+    public void i_send_a_request_to_url_to_see_details_of_an_order(String endpoint) {
+        response = given().header("Cookie", this.cookie)
+                .get(endpoint);
+    }
+    @Then("i receive a list of products that were ordered in order {string}")
+    public void i_receive_a_list_of_products_that_were_ordered_in_order(String order_id) {
+        response.then().statusCode(200);
+        String result_id = response.jsonPath().get("id").toString();
+        assertThat(result_id).isEqualTo(order_id);
+
+        response.then().body("$", hasKey("products"));
+        int count_products = response.jsonPath().getList("products").size();
+        assertThat(count_products).isGreaterThan(0);
     }
 }

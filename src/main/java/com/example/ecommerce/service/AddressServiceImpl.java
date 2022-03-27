@@ -46,15 +46,6 @@ public class AddressServiceImpl implements AddressService {
             ? address.getPostalCod()
             : addressDto.getPostalCode();
 
-            try {
-                PrintWriter p = new PrintWriter("out.txt", "UTF-8");
-                p.println(id);
-                p.println(city);
-                p.println(streetAddress);
-                p.println(postalCode);
-                p.close();
-            } catch(IOException e) {}
-
         Address newAddress = new Address(
             id,
             city,

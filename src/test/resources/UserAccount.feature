@@ -13,10 +13,29 @@ Feature: User can manage profile and its addresses
 
 
     Scenario Outline: User can edit his address
-      Given i am a logged in user with email = "<email>" and password = "<password>"
-      When i send a request to URL "/api/user/address/<id>" to update the city of address with id = "<id>" to "<city>"
-      Then i can see that the city name of that address has been updated at URL "/api/user/address"
+        Given i am a logged in user with email = "<email>" and password = "<password>"
+        When i send a request to URL "/api/user/address/<id>" to update the city of address with id = "<id>" to "<city>"
+        Then i can see that the city name of that address has been updated at URL "/api/user/address"
 
-      Examples:
-      | email                         | password  | id  | city    |
-      | fatemehkarimi.1998@yahoo.com  | admin     | 10  | Shiraz  |
+        Examples:
+        | email                         | password  | id  | city    |
+        | fatemehkarimi.1998@yahoo.com  | admin     | 10  | Shiraz  |
+
+
+    Scenario Outline: User can view his orders
+        Given i am a logged in user with email = "<email>" and password = "<password>"
+        When i send a request to URL "/api/user/orders" to see list of orders
+        Then i can see the list of my previous orders
+
+        Examples:
+        | email                         | password  |
+        | fatemehkarimi.1998@yahoo.com  | admin     |
+
+    Scenario Outline: User can view details of an order
+        Given i am a logged in user with email = "<email>" and password = "<password>"
+        When i send a request to URL "/api/user/order/<id>" to see details of an order
+        Then i receive a list of products that were ordered in order "<id>"
+
+        Examples:
+        | email                         | password  | id  |
+        | fatemehkarimi.1998@yahoo.com  | admin     | 3   |
