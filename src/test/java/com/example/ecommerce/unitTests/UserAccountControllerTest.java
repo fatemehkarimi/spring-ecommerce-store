@@ -1,6 +1,7 @@
 package com.example.ecommerce.unitTests;
 
 
+import com.example.ecommerce.dao.OrderDao;
 import com.example.ecommerce.dao.UserDao;
 import com.example.ecommerce.model.User;
 import com.example.ecommerce.service.UserService;
@@ -37,6 +38,9 @@ public class UserAccountControllerTest {
 
     @MockBean
     UserDao userDao;
+
+    @MockBean
+    OrderDao orderDao;
 
     User user = new User(
             UUID.fromString("aae82711-1546-4118-aaa0-de58f2d3c18b"),
