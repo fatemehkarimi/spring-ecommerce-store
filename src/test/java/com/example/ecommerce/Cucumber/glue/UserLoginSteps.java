@@ -28,8 +28,8 @@ public class UserLoginSteps {
     }
 
     @Given("i send a request to URL {string} with email = {string} and password = {string}")
-    public void i_send_a_request_to_url_with_email_and_password(String endpoint, String user_email, String user_password)
-            throws Exception
+    public void i_send_a_request_to_url_with_email_and_password(
+            String endpoint, String user_email, String user_password) throws Exception
     {
         Object loginData = new Object() {
             public String email = user_email;
